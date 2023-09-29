@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="result"></div>
+<button onclick="prev()"><--</button>
+<button onclick="next()">--></button>
+<script>
+    let currentPage = 1;
+    let totalPages = 1;
+    let result = document.getElementById('result');
+
+    function renderPosts(posts) {
+        result.innerHTML = "";
+        posts.forEach(post => {
+            result.innerHTML += post.title + ' ' + post.content + '<br>';
+        })
+    }
+
+    async function fetchPosts(page) {
+        let res = await fetch(`http://localhost:3000/posts?page=${(page - 1) * 10}&take=10`, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        if (res.ok) {
+            let arr = await res.json();
+            totalPages = Math.ceil(arr.count / 10);
+            renderPosts(arr.posts);
+            console.log(totalPages);
+        }
+    }
+
+    function next() {
+        if (currentPage < totalPages) currentPage++;
+        fetchPosts(currentPage);
+    }
+
+    function prev() {
+        if (currentPage > 1) currentPage--;
+        fetchPosts(currentPage);
+    }
+
+    fetchPosts(currentPage);
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="posts"></div>
+<button onclick="prev()" name="prev"><--</button>
+<button onclick="next()" name="next">--></button>
+
+<script>
+    let currentPage = 1;
+    let totalPage = 1;
+    const result = document.getElementById('posts');
+
+    function renderPosts(posts) {
+        result.innerHTML = "";
+        posts.forEach(post => {
+            result.innerHTML += post.title + ' ' + post.content + '<br>';
+        })
+    }
+
+    async function fetchPosts(page) {
+
+        let res = await fetch(`http://localhost:3000/posts?page=${(page - 1) * 10}&take=10`, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+
+        if (res.ok) {
+            let data = await res.json();
+            totalPage = Math.ceil(data.count / 10);
+            renderPosts(data.posts);
+        }
+    }
+
+    function next() {
+        if (currentPage < totalPage) currentPage++;
+        fetchPosts(currentPage);
+    }
+
+    function prev() {
+        if (currentPage > 1) currentPage--;
+        fetchPosts(currentPage);
+    }
+
+    fetchPosts(currentPage);
+</script>
+</body>
+</html>

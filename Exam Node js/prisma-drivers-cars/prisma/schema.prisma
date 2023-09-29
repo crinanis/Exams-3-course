@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Drivers {
+  id         Int     @id @default(autoincrement())
+  name       String?
+  drivingExp Int?
+  cars       Cars[]
+}
+
+model Cars {
+  id       Int      @id @default(autoincrement())
+  model    String?
+  driver   Drivers? @relation(fields: [driverId], references: [id])
+  driverId Int?
+}

@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model cars {
+  id       Int      @id(map: "PK__cars__3213E83F1DAFCB82") @default(autoincrement())
+  model    String?  @db.VarChar(1)
+  driverId Int?
+  drivers  drivers? @relation(fields: [driverId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__cars__driverId__3A81B327")
+}
+
+model drivers {
+  id   Int     @id(map: "PK__drivers__3213E83F5FBD9F84") @default(autoincrement())
+  name String? @db.VarChar(1)
+  exp  Int?
+  cars cars[]
+}

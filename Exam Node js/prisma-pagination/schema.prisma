@@ -1,0 +1,16 @@
+// schema.prisma
+
+datasource db {
+  provider = "sqlserver"
+  url      = "sqlserver://localhost:1433;user=sa;password=12345;database=posts;trustServerCertificate=true"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Post {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String
+}

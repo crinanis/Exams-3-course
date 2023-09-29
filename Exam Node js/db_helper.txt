@@ -1,0 +1,25 @@
+DATABASE_URL="sqlserver://localhost:1433;database=exam;user=node;password=node;trustServerCertificate=true;connection_limit=5;connectTimeout=10"
+
+
+npx sequelize-auto -h localhost -d exam -u node -x node -e mssql -o "./model" -c config.json
+
+{
+    "dialectOption": {
+        "options":{
+            "encrypt":false
+        }
+    }
+}
+
+
+
+
+const sequelize = new Sequelize("exam", "node", "node", {
+  host: "localhost",
+  dialect: "mssql",
+  define: { timestamps: false },
+});
+
+npm i -g sequelize-cli
+sequelize db:create --env development --config config.json
+sequelize db:create --config config.json
